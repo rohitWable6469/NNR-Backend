@@ -1,12 +1,18 @@
 from flask import Flask, request, jsonify
+import os
 import firebase_admin
-from firebase_admin import credentials,firestore
+from firebase_admin import credentials, firestore
+import json
 
+# Get the credentials from the environment variable
+firebase_config = os.getenv('FIREBASE_CONFIG')
+cred_dict = json.loads(firebase_config)
+cred = credentials.Certificate(cred_dict)
 
 app = Flask(__name__)
 
 
-cred = credentials.Certificate(r"configs\nnrdb-2a971-firebase-adminsdk-sbwoz-d95107b82f.json")
+# cred = credentials.Certificate(r"configs\nnrdb-2a971-firebase-adminsdk-sbwoz-d95107b82f.json")
 firebase_admin.initialize_app(cred)
 
 # Initialize Firestore
@@ -28,6 +34,10 @@ def submit_form():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to add data'}), 500
+
+@app.route('/', methods=['GET'])
+def get_data():
+    return jsonify({"message": "Welcome to NNR Application!"}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
