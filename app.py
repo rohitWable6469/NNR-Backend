@@ -3,6 +3,7 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 import json
+from flask_cors import CORS  # Import CORS
 
 # Get the credentials from the environment variable
 firebase_config = os.getenv('FIREBASE_CONFIG')
@@ -10,7 +11,7 @@ cred_dict = json.loads(firebase_config)
 cred = credentials.Certificate(cred_dict)
 
 app = Flask(__name__)
-
+CORS(app)  # Enable CORS for all routes
 
 # cred = credentials.Certificate(r"configs\nnrdb-2a971-firebase-adminsdk-sbwoz-d95107b82f.json")
 firebase_admin.initialize_app(cred)
