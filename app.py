@@ -4,6 +4,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json
 from flask_cors import CORS  # Import CORS
+import time
+from datetime import datetime
 
 # Get the credentials from the environment variable
 firebase_config = os.getenv('FIREBASE_CONFIG')
@@ -30,6 +32,12 @@ def submit_form():
     try:
         # Get form data from the request
         data = request.json
+        # Get the current time in seconds since the Unix epoch
+        current_time_seconds = time.time()
+
+        # Convert to a readable date and time format
+        readable_time = datetime.fromtimestamp(current_time_seconds).strftime('%d-%m-%Y %H:%M:%S')
+        data["timestamp"] = readable_time
         add_user(data)
         return jsonify({"message": "User added successfully!"}), 200
     except Exception as e:
