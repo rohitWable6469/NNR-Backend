@@ -73,5 +73,26 @@ def submit_document():
         print(e)
         return jsonify({'error': 'Failed to add data'}), 500
 
+
+@app.route('/get_all_documents', methods=['GET'])
+def get_all_documents():
+    try:
+        # Fetch all documents from the "documents" collection
+        documents_ref = db.collection('documents')
+        docs = documents_ref.stream()
+
+        # Prepare the response list
+        documents = []
+        for doc in docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            documents.append(document_data)
+
+        return jsonify(documents), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch documents'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
