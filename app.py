@@ -67,8 +67,8 @@ def submit_document():
         # Convert to a readable date and time format
         readable_time = datetime.fromtimestamp(current_time_seconds).strftime('%d-%m-%Y %H:%M:%S')
         data["timestamp"] = readable_time
-        add_user(data)
-        return jsonify({"message": "User added successfully!"}), 200
+        add_document(data)
+        return jsonify({"message": "Document added successfully!"}), 200
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to add data'}), 500
