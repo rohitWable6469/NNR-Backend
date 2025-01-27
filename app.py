@@ -41,6 +41,13 @@ def add_ae_document(data):
     doc_ref = db.collection("ae_documents").document()  # Auto-generate document ID
     doc_ref.set(data)
     print("Documents data added successfully!")
+    
+
+def add_ae_customer(data):
+    # Add data to Firestore
+    doc_ref = db.collection("ae_customers").document()  # Auto-generate document ID
+    doc_ref.set(data)
+    print("Documents data added successfully!")
 
 
 @app.route('/submit', methods=['POST'])
@@ -141,6 +148,43 @@ def get_all_ae_documents():
         print(e)
         return jsonify({'error': 'Failed to fetch documents'}), 500
 
+
+@app.route('/ae/submit_customer', methods=['POST'])
+def submit_ae_new_customer():
+    try:
+        # Get form data from the request
+        data = request.json
+        # Get the current time in seconds since the Unix epoch
+        current_time_seconds = time.time()
+
+        # Convert to a readable date and time format
+        readable_time = datetime.fromtimestamp(current_time_seconds).strftime('%d-%m-%Y %H:%M:%S')
+        data["timestamp"] = readable_time
+        add_ae_customer(data)
+        return jsonify({"message": "Document added successfully!"}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to add data'}), 500
+
+
+@app.route('/ae/get_all_customers', methods=['GET'])
+def get_all_ae_documents():
+    try:
+        # Fetch all documents from the "documents" collection
+        documents_ref = db.collection('ae_customers')
+        docs = documents_ref.stream()
+
+        # Prepare the response list
+        documents = []
+        for doc in docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            documents.append(document_data)
+
+        return jsonify(documents), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch documents'}), 500
 
 
 if __name__ == '__main__':
