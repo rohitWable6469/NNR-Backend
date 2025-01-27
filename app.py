@@ -177,7 +177,7 @@ def submit_ae_new_customer():
 
 
 @app.route('/ae/get_all_customers', methods=['GET'])
-def get_all_ae_documents():
+def get_all_ae_customers():
     try:
         # Fetch all documents from the "documents" collection
         documents_ref = db.collection('ae_customers')
