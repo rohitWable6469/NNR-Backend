@@ -6,6 +6,9 @@ import json
 from flask_cors import CORS  # Import CORS
 import time
 from datetime import datetime
+import random
+import string
+
 
 # Get the credentials from the environment variable
 firebase_config = os.getenv('FIREBASE_CONFIG')
@@ -20,6 +23,11 @@ firebase_admin.initialize_app(cred)
 
 # Initialize Firestore
 db = firestore.client()
+
+
+def generate_customer_id(length=8):
+    customer_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return customer_id
 
 
 def add_user(data):
@@ -159,6 +167,7 @@ def submit_ae_new_customer():
 
         # Convert to a readable date and time format
         readable_time = datetime.fromtimestamp(current_time_seconds).strftime('%d-%m-%Y %H:%M:%S')
+        data["customerId"] = generate_customer_id()
         data["timestamp"] = readable_time
         add_ae_customer(data)
         return jsonify({"message": "Document added successfully!"}), 200
