@@ -274,5 +274,54 @@ def get_all_ae_payments():
         return jsonify({'error': 'Failed to fetch documents'}), 500
 
 
+@app.route('/ae/get_customers_stats', methods=['GET'])
+def get_customer_stats():
+    try:
+
+        output = []
+
+        # Fetch all Payment documents from the "documents" collection
+        documents_ref = db.collection('ae_payment')
+        payments_docs = documents_ref.stream()
+
+        # Prepare the payment list
+        payments = []
+        for doc in payments_docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            payments.append(document_data)
+
+        # Fetch all Invoice documents from the "documents" collection
+        documents_ref = db.collection('ae_documents')
+        invoice_docs = documents_ref.stream()
+
+        # Prepare the invoice list
+        invoices = []
+        for doc in invoice_docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            invoices.append(document_data)
+
+        # Fetch all Invoice documents from the "documents" collection
+        documents_ref = db.collection('ae_documents')
+        customer_docs = documents_ref.stream()
+
+        # Prepare the invoice list
+        customers = []
+        for doc in customer_docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            customers.append(document_data)
+
+        output = customer_stats_utils(customers, invoices, payments)
+
+
+
+        return jsonify(output), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch documents'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
