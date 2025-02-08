@@ -5,5 +5,6 @@ def customer_stats_utils(customers, invoices, payments):
         customer['payments'] = [payment for payment in payments if payment.get("customerId") == customer_id]
         customer['invoice_total'] = sum([invoice['total'] for invoice in customer['invoices']])
         customer['payment_total'] = sum([payment['amount'] for payment in customer['payments']])
+        customer['outstanding_amount'] = customer['invoice_total'] - customer['payment_total']
     return customers
 
