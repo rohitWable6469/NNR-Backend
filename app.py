@@ -235,5 +235,24 @@ def get_all_ae_expenses():
         return jsonify({'error': 'Failed to fetch documents'}), 500
 
 
+@app.route('/ae/submit_payment', methods=['POST'])
+def submit_ae_new_expense():
+    try:
+        # Get form data from the request
+        data = request.json
+        # Get the current time in seconds since the Unix epoch
+        current_time_seconds = time.time()
+
+        # Convert to a readable date and time format
+        readable_time = datetime.fromtimestamp(current_time_seconds).strftime('%d-%m-%Y %H:%M:%S')
+        data["expenseId"] = generate_customer_id()
+        data["timestamp"] = readable_time
+        add_ae_document(data, 'ae_payment')
+        return jsonify({"message": "Payment added successfully!"}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to add data'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
