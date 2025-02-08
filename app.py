@@ -254,5 +254,25 @@ def submit_ae_new_payment():
         return jsonify({'error': 'Failed to add data'}), 500
 
 
+@app.route('/ae/get_all_payments', methods=['GET'])
+def get_all_ae_payments():
+    try:
+        # Fetch all documents from the "documents" collection
+        documents_ref = db.collection('ae_payment')
+        docs = documents_ref.stream()
+
+        # Prepare the response list
+        documents = []
+        for doc in docs:
+            document_data = doc.to_dict()
+            document_data['id'] = doc.id  # Include the document ID
+            documents.append(document_data)
+
+        return jsonify(documents), 200
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch documents'}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True)
