@@ -236,7 +236,7 @@ def get_all_ae_expenses():
 
 
 @app.route('/ae/submit_payment', methods=['POST'])
-def submit_ae_new_expense():
+def submit_ae_new_payment():
     try:
         # Get form data from the request
         data = request.json
