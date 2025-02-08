@@ -304,7 +304,7 @@ def get_customer_stats():
             invoices.append(document_data)
 
         # Fetch all Invoice documents from the "documents" collection
-        documents_ref = db.collection('ae_documents')
+        documents_ref = db.collection('ae_customers')
         customer_docs = documents_ref.stream()
 
         # Prepare the invoice list
