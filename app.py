@@ -8,6 +8,7 @@ import time
 from datetime import datetime
 import random
 import string
+from utils import customer_stats_utils
 
 
 # Get the credentials from the environment variable
@@ -314,9 +315,6 @@ def get_customer_stats():
             customers.append(document_data)
 
         output = customer_stats_utils(customers, invoices, payments)
-
-
-
         return jsonify(output), 200
     except Exception as e:
         print(e)
